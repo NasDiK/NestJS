@@ -1,6 +1,6 @@
 import * as TelegramBot from 'node-telegram-bot-api';
 import {Extensions} from '@extensions';
-import {CallBackType} from './types';
+import {CallBackType} from '../types';
 
 export const linkWithAccount = async(telebot: TelegramBot, msg: TelegramBot.Message, ext: Extensions) => {
   const sendedMessage = await telebot.sendMessage(msg.from.id, 'Укажите имя пользователя', {

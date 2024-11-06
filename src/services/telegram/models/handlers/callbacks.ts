@@ -1,7 +1,7 @@
 import { Extensions } from "@extensions";
 import * as TelegramBot from "node-telegram-bot-api";
 import {linkInDb} from './link';
-import {CallBackType} from './types';
+import {CallBackType} from '../types';
 
 export const checkReplyMessage = async(telebot: TelegramBot, msg: TelegramBot.Message, ext: Extensions) => {
   const replyMessage = msg.reply_to_message;

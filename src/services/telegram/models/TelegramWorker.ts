@@ -2,6 +2,7 @@ import * as TelegramBot from 'node-telegram-bot-api';
 import '../../../../envConfig';
 import {Extensions} from '../../../extensions';
 import * as Handlers from './handlers';
+import {TelegramRepository} from './TelegramRepository';
 
 export class TelegramWorker {
   telebot: TelegramBot;
@@ -9,7 +10,6 @@ export class TelegramWorker {
   ext: Extensions;
   
   constructor(ext: Extensions) {
-    console.log(process.env.TELEGRAM_API_KEY);
     this.telebot = new TelegramBot(process.env.TELEGRAM_API_KEY, {
       polling: {
         interval: 2000,
@@ -18,14 +18,13 @@ export class TelegramWorker {
     });
     this.logger = ext.loggerBuilder('TelegramListener');
     this.ext = ext;
-
-    this.telebot.on('text', this.textListener);
     
     this.init();
   }
 
   async init() {
     await this.telebot.stopPolling();
+    this.telebot.on('text', this.textListener);
     await this.telebot.startPolling();
     this.logger.info('Pooling started');
   };
@@ -44,10 +43,11 @@ export class TelegramWorker {
         break;
       }
       case '/register': {
-        Handlers.Start.registerUser(telebot, msg, ext);
+        Handlers.Register.registerUser(telebot, msg, ext);
       }
       default: {
         Handlers.Callbacks.checkReplyMessage(telebot, msg, ext);
+        break;
       }
     }
   }
@@ -55,19 +55,16 @@ export class TelegramWorker {
   logMessage = async(msg: TelegramBot.Message, meta: TelegramBot.Metadata) => {
     const {pg} = this.ext;
 
-    console.log('logMessage', msg.text);
-
     try {
-      await pg()
-      .insert({
-        message_type: meta.type,
-        telegram_id: msg.from.id,
-        received_message: msg.text,
-        msg_json: JSON.stringify(msg)
-      })
-      .into('telegram_logs');
+      await TelegramRepository.insertLogs(
+        pg,
+        [{
+          message_type: meta.type,
+          telegram_id: msg.from.id,
+          received_message: msg.text,
+          msg_json: JSON.stringify(msg)
+        }]);
     } catch (err) {
-      console.log('error', err);
       this.logger.error(JSON.stringify(err));
     }
   }
