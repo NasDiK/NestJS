@@ -1,0 +1,72 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table users {
+  id integer [primary key]
+  username varchar [unique]
+  fullName varchar
+  password varchar
+  blockedUntil timestamp
+  createdAt timestamp
+}
+
+Table invites {
+  fromId integer
+  toId integer
+  inviteType varchar [note: 'ROOM или CONTACT']
+  createdAt timestamp
+}
+
+Table logs {
+  createdAt timestamp
+  level integer
+  type integer
+  body varchar
+  userId integer
+}
+
+Table usersRights {
+  userId integer
+  service integer
+  rights integer
+}
+
+Table rooms {
+  id integer [primary key]
+  title varchar
+}
+
+Table roomMessages {
+  id integer [primary key]
+  roomId integer
+  fromUserId integer
+  createdAt timestamp
+}
+
+Table userRooms {
+  userId integer [primary key]
+  roomId integer [primary key]
+  rights integer
+
+  // "по ней же определим кто существует в комнате"
+}
+
+Table userContacts {
+  userFirst integer [primary key]
+  userSecond integer [primary key]
+}
+
+Table userMessages {
+  id integer [primary key]
+  messageFrom integer
+  messageTo integer
+  sendedAt timestamp
+  readedAt timestamp
+  content jsonb
+}
+
+// Ref user_posts: posts.user_id > users.id // many-to-one
+
+// Ref: users.id < follows.following_user_id
+
+// Ref: users.id < follows.followed_user_id

@@ -1,5 +1,5 @@
 import * as TelegramBot from 'node-telegram-bot-api';
-import '../../../../envConfig';
+import '../../../envConfig';
 import {Extensions} from '../../../extensions';
 import * as Handlers from './handlers';
 import {TelegramRepository} from './TelegramRepository';

@@ -1,7 +1,7 @@
 import Knex from 'knex';
-import '../../envConfig';
+import '../envConfig';
 
-export const pgConfig: Knex.Knex.Config = {
+export const pgConfig = {//: Knex.Knex.Config = {
   client: 'pg',
   connection: {
     database: process.env.DB_NAME,
@@ -16,6 +16,6 @@ export const pgConfig: Knex.Knex.Config = {
   },
   migrations: {
     tableName: 'knex_migrations',
-    directory: './migrations'
+    directory: './src/migrations'
   }
 };

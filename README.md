@@ -1,3 +1,5 @@
+await fetch('http://localhost:3000/posts', {}).then((x) => {console.log(x); return x;}).then((x) => x.json())
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>

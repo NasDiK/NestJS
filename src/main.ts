@@ -2,11 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { pgConfig } from './config';
 import {buildExtensions} from './extensions';
-import '../envConfig';
+import './envConfig';
 import {TelegramWorker} from './services/telegram/models/TelegramWorker';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {cors: true});
+
+  app.setGlobalPrefix('api')
+
   await app.listen(3000);
 
   const ext = buildExtensions();
@@ -18,6 +21,6 @@ async function bootstrap() {
     startLogger.info(`PG config loaded. Config: hidden`)
   }
 
-  const telegramWorker = new TelegramWorker(ext);
+  // const telegramWorker = new TelegramWorker(ext);
 }
 bootstrap();
