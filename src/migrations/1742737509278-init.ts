@@ -109,7 +109,7 @@ export class Init1742737509278 implements MigrationInterface {
           columns: [
             {name: 'userId', type: 'integer', isPrimary: true},
             {name: 'roomId', type: 'integer', isPrimary: true},
-            {name: 'rights', type: 'integer', isPrimary: true},
+            {name: 'rights', type: 'integer', isNullable: false},
           ],
           foreignKeys: [
             {columnNames: ['userId'], referencedColumnNames: ['id'], referencedTableName: 'users'},
